@@ -4,7 +4,7 @@ RUN set -e \
 	&& apt update; apt install wget tar -y
 FROM base as asterisk-base
 
-
+MAINTAINER jan@civitelli.de
 
 ENV asterisk_version="18.9-cert9"
 
