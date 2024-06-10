@@ -25,13 +25,14 @@ jobs:
           name: set image version
           command: |
             chmod +x build-helper-scripts/semantic-versioning-now.sh
-            IMAGEVERSION=$(build-helper-scripts/semantic-versioning-now.sh)
       - run:
           name: Build Docker image
           command: |
+            IMAGEVERSION=$(build-helper-scripts/semantic-versioning-now.sh)
             docker build -t jcivitell/$CIRCLE_PROJECT_REPONAME:$IMAGEVERSION .
       - run:
           name: Push application Docker image
           command: |
+            IMAGEVERSION=$(build-helper-scripts/semantic-versioning-now.sh)
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push jcivitell/$CIRCLE_PROJECT_REPONAME:$IMAGEVERSION
