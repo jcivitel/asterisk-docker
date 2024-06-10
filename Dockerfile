@@ -16,7 +16,7 @@ RUN set -e \
 	&& chmod +x contrib/scripts/install_prereq; contrib/scripts/install_prereq install \
 	&& chmod +x contrib/scripts/get_mp3_source.sh; contrib/scripts/get_mp3_source.sh
 	
-COPY menuselect.makeopts /tmp/asterisk/menuselect.makeopts
+#COPY menuselect.makeopts /tmp/asterisk/menuselect.makeopts
 RUN set -e \
 	&& cd /tmp/asterisk; ./configure --with-pjproject-bundled \
 	&& make NOISY_BUILD=yes menuselect.makeopts \
