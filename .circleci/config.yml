@@ -5,6 +5,11 @@ workflows:
       - build:
           context:
             - dockerhub
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
 jobs:
   build:
     working_directory: ~/app
@@ -19,19 +24,14 @@ jobs:
           name: Init git submodule && clone build-helper
           command: |
             git submodule update --init --recursive
-            git clone https://bitbucket.org/code-orange/build-helper-scripts
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: build process
           command: |      
-            docker build -t jcivitell/$CIRCLE_PROJECT_REPONAME:latest .
+            docker compose build
       - run:
           name: upload image
           command: |
-            chmod +x build-helper-scripts/semantic-versioning-now.sh
-            IMAGEVERSION=$(build-helper-scripts/semantic-versioning-now.sh)
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker image tag jcivitell/$CIRCLE_PROJECT_REPONAME:latest jcivitell/$CIRCLE_PROJECT_REPONAME:$IMAGEVERSION
-            docker push jcivitell/$CIRCLE_PROJECT_REPONAME:latest
-            docker push jcivitell/$CIRCLE_PROJECT_REPONAME:$IMAGEVERSION
+            docker compose push --include-deps

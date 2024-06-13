@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  asterisk-docker:
+  image: jcivitell/asterisk-docker
+  build:
+    context: .
+    dockerfile: Dockerfile
+    tags:
+    - "jcivitell/asterisk-docker:${CIRCLE_BRANCH:-master}"
+    - "jcivitell/asterisk-docker:${CIRCLE_TAG:-latest}"
