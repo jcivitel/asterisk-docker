@@ -31,7 +31,7 @@ COPY --from=builder /usr/lib/libasterisk* /usr/lib/
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       libjansson4 libsqlite3-0 libssl1.1 \
+       libjansson4 libsqlite3-0 libssl3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && ldconfig
