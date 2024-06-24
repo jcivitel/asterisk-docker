@@ -5,7 +5,7 @@ ENV asterisk_version="18.9-cert9"
 RUN set -e \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-       wget tar build-essential \
+       wget tar build-essential libssl-dev \
     && useradd -r -s /bin/false asterisk \
     && mkdir -p /tmp/asterisk && cd /tmp/asterisk \
     && wget http://downloads.asterisk.org/pub/telephony/certified-asterisk/releases/asterisk-certified-${asterisk_version}.tar.gz -O asterisk.orig.tar.gz \
@@ -26,11 +26,14 @@ LABEL maintainer="jan@civitelli.de"
 COPY --from=builder /usr/lib/asterisk /usr/lib/asterisk
 COPY --from=builder /usr/sbin/asterisk /usr/sbin/asterisk
 COPY --from=builder /etc/asterisk /etc/asterisk
+COPY --from=builder /var/lib/asterisk /var/lib/asterisk
+COPY --from=builder /usr/lib/libasterisk* /usr/lib/
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       libjansson4 libsqlite3-0 \
+       libjansson4 libsqlite3-0 libssl1.1 \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && ldconfig
 
 CMD ["asterisk", "-f"]
